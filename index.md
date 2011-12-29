@@ -11,7 +11,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 | ------                                                                                                   | ------          |
 |  <h2 id="declarations">基本声明</h2>                                                                       |                 |
 |  `var x = 5`<br>`x = 6`                                                                                             |  可变变量, 其值可修改       |
-|  <span class="label success">好</span> `val x = 5`<br> <span class="label important">Bad</span> `x=6`  |  不可变, 不能修改其值       |
+|  <span class="label success">好</span> `val x = 5`<br> <span class="label important">坏</span> `x=6`  |  不可变, 不能修改其值       |
 |  `var x: Double = 5`                                                                                     |  明确类型. 如果未说明,编译器会自己决定 (more later) |
 |  `var x: Double = 5;val y = 42`                                                                                     |  本行最后一条语句的分号是可选的 |
 |  `var x = {5}`<br>`var x = {1+2}`             |  也可以用表达式的结果赋值  |
@@ -27,17 +27,17 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |<h2 id="syntax details">语法细节</h2>|
 |不知道该放哪的一些内容||
 |`instance.bar`|bar 可能是一个field访问,或者一个无参方法调用. scala 里面两者是没有区别的. 因此在 def 和 val 之间你可以根据个人喜欢选择|
-|`instance.bar()`|for method calls, you can add (). by convention, methods without () don't change any states and just return a calculated value. methods with () are called for they effects, for example changing a value, printing something on the console and so on|
-|`instance bar`|you can skip the "." if it is obvious to the compiler what you mean. humans and the compiler usually agree if there is an instance on the left and a method of that instance on the right. this is useful for DSLs|
-|`println {"hello world"}`|if a method has one parameter, you can also pass a block instead of using (). also useful for DSLs|
-|  <h2 id="declarations2">Not so basic declarations</h2>                                                                       |                 |
-| `val x = {`<br>`class y(val z: String)`<br>`new y("hello").z`<br>`}`<br><span class="label important">坏</span>`val foo = new y("does not work outside the block above")`| everything can be nested in anything, but everything can only be accessed in its scope|
-| `lazy val x = expensiveOperation()`|the expensive operation is executed once as soon as the value of x is needed, not before|
-| `def method(a:String = "hello", b:String = "world") = a+" "+b`|method will default values|
-| `method("goodbye")`|call to method above, unspecificed parameters will get default values. returns "goodbye world"|
-| `method(b = "friend")`|call to method above, explicitly passes a string to b. a defaults to "hello". returns "hello friend"|
-|`def method(param: => String)`|"=>" means that when the method is called, the parameter is wrapped in a function which is executed when accessed. the string is evaluated every time when needed (see Iterator.continually), but not before. the value is not cached, but you can pass a lazy val to make it cached.|
-|`def method(s:String)(i:Int)`|method with multiple parameter lists|
+|`instance.bar()`|对于方法调用, 可以加上 (). 依照规范, 不带 () 的方法只进行计算，返回结果，不会改变任何状态.调用带 () 的方法是为了其效果，比如改变一个值，在终端上打印内容等|
+|`instance bar`|如果对于编译器来说你的意图很明显，就可以省略 "." 通常人类和编译器都会同意把类实例放左边，它的方法放右边，这对于DSL很有用|
+|`println {"hello world"}`|对于单参方法，你可以用一个block代替(). 这个对 DSLs 也很有用|
+|  <h2 id="declarations2">不是那么基本的声明</h2>                                                                       |                 |
+| `val x = {`<br>`class y(val z: String)`<br>`new y("hello").z`<br>`}`<br><span class="label important">坏</span>`val foo = new y("does not work outside the block above")`| 任何东西都可以嵌入其他东西，但只能在其作用域内访问到|
+| `lazy val x = expensiveOperation()`|这个昂贵的操作仅在需要x的时候执行, 之前不会|
+| `def method(a:String = "hello", b:String = "world") = a+" "+b`|带默认值的方法|
+| `method("goodbye")`|调用上面的方法, 未指定的参数会使用其默认值. 返回 "goodbye world"|
+| `method(b = "friend")`|调用上面的方法, 明确传入参数b. a 用默认的 "hello". 返回 "hello friend"|
+|`def method(param: => String)`|"=>" 的含义是，当调用这个方法时，参数是由一个函数返回的 that when the method is called, the parameter is wrapped in a function which is executed when accessed. the string is evaluated every time when needed (see Iterator.continually), but not before. the value is not cached, but you can pass a lazy val to make it cached.|
+|`def method(s:String)(i:Int)`|有多个参数列表的方法|
 |`val intermediate = method("hello")`<br>`intermediate(5)`|why? because you can apply one parameter list at once and the next ones later and pass "the incomplete call" around. in java, you would use a builder for this.|
 |  <h2 id="object_orientation">Declarations related to OO</h2>                                                     |                 |
 | `class Foo`| class declaration - nested declaration also possible|
