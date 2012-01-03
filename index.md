@@ -47,17 +47,17 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |  `class C(x: R)` _等同于_ <br>`class C(private val x: R)`<br>`var c = new C(4)`                         |  构造参数 - 如果没有明确val,自动转化成私有field. |
 |  `class C(val x: R)`<br>`var c = new C(4)`<br>`c.x`                                                      |  构造参数 - 明确val,作为公开 fields |
 |  `class C(var x: R) {`<br>`assert(x > 0, "positive please") //class body = constructor`<br>`var y = x // 公开 field`<br>`val readonly = 5 // 只读 field`<br>`private var secret = 1 // 私有 field`<br>`def this = this(42) // 替代构造函数`<br>`}`|包含常用情况的简单例子. 注: 所有的替代构造函数必须调用类声明中声明的主构造函数.以确保不会因为构造函数重载忘记初始化某个field.|
-|  `new{ ... }`                                                                                            |  anonymous class. more later (see implicits)|
-|`new Foo {...}`|anonymous subclass of Foo. Foo might be a class or a trait|
-|  `abstract class D { ... }`                                                                              |  define an abstract class. (non-createable, you have to create a subclass) |
-|  `class C extends D { ... }`                                                                             |  define an inherited class. |
-|  `class D(var x: R)`<br>`class C(x: R) extends D(x)`                                                     |  inheritance and constructor params)
-|`abstract class Foo {def bar:String}`|skipping the body of a method or value of a val makes the method/val abstract. no need for an "abstract" keyword. overriding an abstract def or val doesn not require an "override" keyword. overriding a non abstract def or val does.|
-|  `classOf[String]`                                                                                       |  class literal. |
-|  `x.isInstanceOf[String]`                                                                                |  type check (runtime) |
-|  `x.asInstanceOf[String]`                                                                                |  type cast (runtime) |
-|`case class Foo; case object Bar`|the keyword "case" makes the compiler generate equals & hashcode methods for that class. also, constructor params are always public readonly fields|
-|  <h2 id="functiondeclaration">Declaring functions</h2>                                                                       |                 |
+|  `new{ ... }`                                                                                            |  匿名类. more later (see implicits)|
+|`new Foo {...}`|Foo的匿名子类. Foo 可能是 class 或 trait|
+|  `abstract class D { ... }`                                                                              |  定义一个抽象 class. (不可实例化, 必须创建其子类) |
+|  `class C extends D { ... }`                                                                             |  定义一个继承类. |
+|  `class D(var x: R)`<br>`class C(x: R) extends D(x)`                                                     |  继承与构造参数)
+|`abstract class Foo {def bar:String}`|不带body的方法或没有value的val是抽象的，不需要显示声明 "abstract". 覆盖抽象的 def 或 val 也不需要 "override" 关键字. 但覆盖非抽象的 def 或 val 时必须带有 "override" 关键字.|
+|  `classOf[String]`                                                                                       |  class 字面值. |
+|  `x.isInstanceOf[String]`                                                                                |  类型检查 (运行时) |
+|  `x.asInstanceOf[String]`                                                                                |  类型转换 (运行时) |
+|`case class Foo; case object Bar`|遇到关键字 "case" ，编译器会为其生成 equals & hashcode 方法，并且其构造参数都是只读的公开fields|
+|  <h2 id="functiondeclaration">函数声明</h2>                                                                       |                 |
 | `(i:Int) => i+1`|creates a function.| 
 | `var func = (i:Int) => i+1`|creates a function and stores it in a variable|
 | `func(5)`|executing the function above|
@@ -69,7 +69,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`def method(s:String)(s2:String) = s+" "+s2`<br>`val intermediate:(String)=>String = method("hello")`<br>`intermediate("world")`|parameter lists revisited: the intermediate, "incomplete method calls" are functions. the result of the last call is "hello world"|
 |`func(5)`<br>`func.apply(5)`|what you are actually calling is the apply-method of a function instance, but you don't have to explicitly write that. if no method name is given, the compiler assumed you want to call "apply"|
 |`def createFunction = (i:Int) => i+1`<br>`createFunction(5)`|if you have read the syntax section above, you can figure out what happens here. first, createFunction is called without () and without a parameter. then, 5 is applied to the apply method of the *result* of createfunction|
-|  <h2 id="typeinference">Return types and type inference</h2>                                                                       |                 |
+|  <h2 id="typeinference">返回类型与类型推断</h2>                                                                       |                 |
 |  `val x = "hello"`|the compiler always picks the most specific type possible, in this case java.lang.String|
 |  `val x:Serializable = "hello"`|you can always specify a more general one|
 |  `def x {print("hello world")}`                 | method without "=" means the method has no return type/return type is void (this is a lie)  | 
@@ -78,7 +78,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 | `val block = if (a) foo else bar`|almost everything is an expression and thus, has a return type. this includes if-else-structures|
 |`def x = {`<br>`if (System.currentTimeMillis() % 2 == 0) Integer.valueOf(1) else java.lang.Double.valueOf(2)`<br>`}`|here, the compiler picks the most specific supertype of both Integer and Double which is java.lang.Number (this is a lie)|
 |`def x(i:Int):Int = if (i==0) 1 else i*x(i-1)`|recursive methods need an explicit return type. fail.|
-|  <h2 id="collections">Scala Collections</h2>                                                                       |                 |
+|  <h2 id="collections">Scala 集合</h2>                                                                       |                 |
 |`1 to 3, Set(1,2,3), Buffer(1,2,3), ArrayBuffer(1,2,3), ListBuffer(1,2,3), List(1,2,3), Array(1,2,3),Vector(1,2,3), Map(1 -> "a", 2 -> "b")`|simple collection creations. scala has mutable and immutable collections.|
 |`1 :: 2 :: 3 :: Nil`|In addition to that, Lists have an alternative syntax|
 |`1 #:: 2 #:: 3 #:: Stream.empty`|Streams also save an alternative syntax|
@@ -111,7 +111,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`Iterator.continually(randomNumber)`|collections and iterators can also be created from functions and methods|
 |`Iterator.continually(randomNumber).take(100).max`|highest of 100 random numbers. again: there are methods for everything you can possibly imagine. many are taking functions so the flexibility is epic :)|
 |`Iterator.continually(randomThings).take(100).maxBy(comparisonFunction)`|highest of 100 random things. as above, but can be used for anything.|
-| <h2 id="fold">The power of collections and functions</h2>|
+| <h2 id="fold">集合与函数的力量</h2>|
 | using closures, it is possible to avoid repetitions of boilerplate - instead you pass a function to a method that hides the boilerplate. apart from filter and map, two other epic wins are reduce and fold.|
 |`List(1,2,3,4,5).reduce((i,i2) => i+i2)`|result: ((((1+2)+3)+4)+5). in human speech, it takes 2 elements and merges them into one. imagine the collection turning from 1,2,3,4,5 into 3,3,4,5. then repeat:6,4,5 -> 10,5 -> 15|
 |`List(1,2,3,4,5).reduce(_ + _)`|same as above, using "_" for the first and second parameter|
@@ -120,7 +120,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`"comma separated numbers: " + List(1, 2, 3, 4, 5).fold("")(_ + ", " + _)`|finally, you won't have to fiddle around with the last "," anymore!|
 |in java this would all look like:<br>`Acc acc = ?;`<br>` for (T t: coll) {if (acc==null) {acc = t;} else {acc = doStuff(acc,t);}}`|this is boilerplate code you can avoid *every single time!*. write only what (doStuff) should happen, not "what and how" (boilerplate code + doStuff).|
 |where else could you save boilerplate? think about it!<br>try-catch-finally. define your error handling once, and just inject your logic there. no need to copy & paste your try-catch blocks anywhere
-| <h2 id="generics">Generics</h2>|
+| <h2 id="generics">泛型</h2>|
 | `def foo[BAR](bar:BAR):BAR = bar`|simple type parameter, can be anything|
 | `def foo[BAR <: java.lang.Number](bar: BAR) = bar.doubleValue() + 5`|upper bound, BAR must be a java.lang.Number or a subclass of it|
 | `def foo[BAR >: java.lang.Number](bar: BAR) = bar`|lower bound, type must be java.lang.Number or a superclass of it, but not a subclass of java.lang.Number. note that you can still pass a double, but the type parameter and therefore the return type will be java.lang.Number. the bound applies to the type parameter itself, not the type of the parameter that is passed to the function|
@@ -136,7 +136,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`def foo[A: Manifest] {val classAtRuntime = manifest[A].erasure; println(classAtRuntime);}`|Adding ":Manifest" will make the compiler add magic so you can get the type parameter at runtime via `manifest[TYPEPARAM]`|
 |`foo[String]`|call to method above, prints "class java.lang.String"|
 |`def foo[A <: Bar with Serializable with Foobar]`|A must be a subtype of Bar, implement Serializable and also Foobar at the same time|
-|<h2 id="option">Option aka "Avoid NullPointerExceptions with type safety"</h2>
+|<h2 id="option">Option 即 "类型安全的避免NullPointerException"</h2>
 |`def neverReturnsNull:Option[Foo] = ....`|in scala, you can use the type system to tell the caller of a method whether or not "null" is a valid return or parameter value. the way scala offers is "Option". you can follow a simple convention: if a parameter or return type can be null, wrap it in an Option instead.|
 |`if (neverReturnsNull.isEmpty) fail(); else success(neverReturnsNull.get);`|this forces the caller to check for null explicitly.|
 |`val modified = neverReturnsNull.map(notNullInHere => doStuffAndReturnNewResult(notNullInHere)`|you can use options like collections. the conversion/mapping function is applied to the contained value if there is one.|
@@ -146,21 +146,21 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`val unsafelyAccessed = option.get`|the compiler does not force you to check if an option is filled|
 |`val safelyAccessed = option.getOrElse(bar)`|gets the content of the option or "bar" if the option is empty|
 |`val firstNonEmptyOption = option.orElse(option2).orElse(option3)`|no need for if-else|
-|<h2 id="objects">Objects</h2>|
+|<h2 id="objects">Objects-对象</h2>|
 |`object Foo {val bar = "hello"}`|declared like a class, but "simply exists", similar to "static" in java. however, it is a real singleton so it can be passed around as an object.|
 |`Foo.bar`|field access and method callswork like "Foo" is a val pointing at the object instance. or in java terms "just like static stuff"|
 |`object Foo {def apply(s:String) = Integer.parseInt(s)}`|the apply-shortcut works everywhere, Foo("5") becomes Foo.apply("5"). remember Some(x)? it was the same here.
 |`class Foo;object Foo`|this is possible. the object Foo is then called a companion object.|
 |`object Foo {def apply(i:Int) = new Foo(i+1)}`|you can use methods in the object Foo as factory methods to keep the actual constructor nice and clean|
 |`def apply[A](x: A): Option[A] = if (x == null) None else Some(x)`|this is what happens when you call Some(x)|
-|<h2 id="Tuples">Tuples</h2>|
+|<h2 id="Tuples">Tuples-元组</h2>|
 |`val x:(Int, Int) = (1,2)`|Sometimes, you want to group things together and pass them around as one object, but creating a class for that would be overkill|
 |`x._1`|access the first element of a tuple|
 |`def takesTuple(p:(Int, String) {...}`|method accepting a tuple|
 |`takesTuple(5,"hello)`|(5, "hello") could be 2 parameters or a tuple. the compiler is smart enough to figure out you meant the tuple one because it looks at the type signature of "takesTuple".|
 |`takesTuple((5,"hello))`|same as above, but explicitly creating the tuple|
 |`coll zip coll2`|creates a single collection which contains tuples which contain values from coll and coll2, matching by index. for example `List(1,2) zip (List("a","b")` becomes `List((1,"a"),(2,"b"))`
-|<h2 id="pattermatching">Pattern matching</h2>|
+|<h2 id="pattermatching">模式匹配</h2>|
 |`x match {`|scala has a very powerful switch|
 |`case "hello" => {...}`|gets executed if x equals "hello". is tested via equals
 |`case s:String => {...}`|gets executed if x is any string. s then exists in the code block as a val.
@@ -173,7 +173,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`case List(_, _, 3, y, z) if z == 5 => {...}`|matches if x is a list of size 5 which has a 3 at index 3 and if the fifth element is 5. the fourth element of the list then exists as "y" inside the code block, the last one does as "z".|
 |`case _ :: _ :: 3 :: y :: z :: Nil if z == 5 => {...}`|same as above. note: the compiler will refuse to compile matches if they are obviously nonsense. for example x must not be something that cannot be a list for this case to compile. try `5 match {case List(5) => ...}`|
 |`}`|how the hell did that work? see below|
-|<h2 id="unapply">Destructuring</h2>|
+|<h2 id="unapply">Destructuring-解构</h2>|
 |`object Foo { def unapply(i: Int) = if (i%2==2) Some("even") else None`|we need the reverse of an apply method - unapply.|
 |`val Foo(infoString) = 42`|here, 42 is passed to unapply. if the result is an option, it's value is now stored in "infoString"|
 |`42 match {case Foo(infoText) => {...}}`|if some is returned, the match is considered positive and the options value is bound to a val|
@@ -184,7 +184,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`val a::tl = List("hello", "scala", "world"`|same as above using alternative list syntax|
 |`val List(a,_*) = List("hello","scala","world")`|sams as above, but discards the last 2 elements, b does not exist|
 |Note: for case classes, an unapply method is automatically generated|
-|<h2 id="traits">Traits</h2>|
+|<h2 id="traits">Traits-特性</h2>|
 |`trait Foo {`|Like a java interface, but more powerful. you can:|
 |`def getBar():Bar`|define abstract methods like in a java interface|
 |`def predefinedMethod(s:String) = "hello world"`|add non-abstract methods as well. a good example is the Ordered-trait. is expects you to implement a compare-method and delivers 4 other methods (<, >, <=, >=) which already come with an implementation based on compare|
@@ -198,7 +198,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`class Foo extends BarTrait`|declaring a class which implements Bar directly|
 |`class Foo extends BarTrait with Serializable`|first extends, then with|
 |`class A extends B with C with D with E`|inside E, super refers to D. inside D, super refers to C, and so on. keep this in mind when overriding the same method with different traits which call they supers.|
-|  <h2 id="packages">packages</h2>                                                                         |                 |
+|  <h2 id="packages">包</h2>                                                                         |                 |
 |  `import scala.collection._`                                                                             |  wildcard import. |
 |  `import scala.collection.Vector` <br> `import scala.collection.{Vector, Sequence}`                      |  selective import. |
 |  `import scala.collection.{Vector => Vec28}`                                                             |  renaming import. |
@@ -216,7 +216,7 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |  `val evenNumbers = for (i <- 1 to 10) yield (i*2)`|yield means "the loop should return that". in this case, you get all even numbers from 2 to 20|
 |  `for (x <- xs if x%2 == 0) yield x*10` _same as_ <br>`xs.filter(_%2 == 0).map(_*10)`                    |  what you write, and what the compiler does |
 |  `for ((x,y) <- xs zip ys) yield x*y`              |  pattern matching works in here |
-|<h2 id="implicit conversions">Implicits</h2>|
+|<h2 id="implicit conversions">Implicits-隐含</h2>|
 |`implicit`|mystic keyword. can be attached to vals, vars, defs and objects and method parameters|
 |`def parseInt(s:String) = Integer.parseInt(s)`|simple string -> int method|
 |`implicit def parseInt(s:String) = Integer.parseInt(s)`|implicit string -> int method. it still can be used as a normal method, but it has one special feature|
@@ -228,14 +228,14 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`def addTwoThings[T](t:T, t2:T)(implicit logicToUse:GenericAddition[T]) = logicToUse.add(t,t2)`|method using a second implicit parameter list|
 |`addTwoThings(1,2)(IntAddition)`|call to method above. so far, no magic involved.|
 |`addTwoThings(1,2)`|if a matching implicit object is in scope, it will automatically be used. you don't have to pass it yourself. it's a nice feature to separate the "what" from "how" and let the compiler pick the "how"-logic automatically.|
-|<h2 id="types">Abstract types</h2>|
+|<h2 id="types">抽象类型</h2>|
 |`type Str = String`|simple alias. Str and String are equal for the compiler|
 |`type Complex[A] = (String,String,String,A)`|if you are too lazy to write a complex type expression because a part of the expression is constant, use this. "Complex" is called a type contructor, and A is its parameter. you can declare something as Complex[Int] and it is considered equal to any Tuple having the type (String, String, String, Int)|
 |`type StructualType = {def x:String;val y:Int}`|this is a structural type. is allows type safe duck-typing. if you declare a method that accepts "StructuralType", is accepts all objects that have a method x:String and a field y:Int. at runtime, reflection is used for this, but you cannot mess it up at compile time like in dynamically types languages.| 
 |`class X {type Y <: Foo}`|types can be clared in classes and traits and overridden in subclasses. upper and lower bounds apply here, too.|
 |`type X = {type U = Foo}`|types can be nested. this is useful for things that are too big to explain here, but i can tease you a bit: you can declare a type that "is an int but with an attached subtype". at runtime, everything is still an int, but at compile time, userids, inches, the number of hairs - everything would have a different type and you would get compile errors if you tried to mix them. for strings, you could tag them with an "is resource key", "is already resolved" or "is already html-escaped"-type to avoid doubly resolved or escaped strings. for details, see http://etorreborre.blogspot.com/2011/11/practical-uses-for-unboxed-tagged-types.html
 |`this.type`|this refers to the type "this" has. this is pretty useless as long as you are inside "this". but if you use it as a return type, it get's updated once you use a subclass. simple use case: `def cloneOfMe:this.type`. you'll want a subclass to return it's own type, not the parent type.|
-|<h2 id="freeeeeeedom">For java programmers: Lifted restrictions / Important differences</h2>|
+|<h2 id="freeeeeeedom">致java程序员: 升腾限定 / 重要差异</h2>|
 |If you are coming from java, you might have gotten used to several restrictions and might not even try to do it in scala because you expect it not to work. here is what does work in scala, but not in java|
 |`a == b`|this is a null safe call to equals. if you want a check by reference, use "eq" instead of "=="|
 |`var x = 0`<br>`1 to 10 foreach {i => {`<br>`println("changing x from inside another class")`<br>`x += i`<br>`}`|in java, you cannot access local variables from anonymous classes unless they are final. in scala, you can.|
