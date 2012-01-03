@@ -36,17 +36,17 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 | `def method(a:String = "hello", b:String = "world") = a+" "+b`|带默认值的方法|
 | `method("goodbye")`|调用上面的方法, 未指定的参数会使用其默认值. 返回 "goodbye world"|
 | `method(b = "friend")`|调用上面的方法, 明确传入参数b. a 用默认的 "hello". 返回 "hello friend"|
-|`def method(param: => String)`|"=>" 的含义是，当调用这个方法时，参数是由一个函数返回的 that when the method is called, the parameter is wrapped in a function which is executed when accessed. the string is evaluated every time when needed (see Iterator.continually), but not before. the value is not cached, but you can pass a lazy val to make it cached.|
+|`def method(param: => String)`|"=>" 的含义是，当调用这个方法时，参数是一个函数的返回值,每次访问这个参数，都要执行此函数进行计算(see Iterator.continually). 计算结果不会被cached, 但可以传递一个lazy val使它cached.|
 |`def method(s:String)(i:Int)`|有多个参数列表的方法|
-|`val intermediate = method("hello")`<br>`intermediate(5)`|why? because you can apply one parameter list at once and the next ones later and pass "the incomplete call" around. in java, you would use a builder for this.|
-|  <h2 id="object_orientation">Declarations related to OO</h2>                                                     |                 |
-| `class Foo`| class declaration - nested declaration also possible|
-| `class Foo(var x:String, val y:Int)`| class declaration with 2 public fields, one mutable, one immutable. constructor is automatically generated. only new Foo("1",2) is possible|
-| `class Foo {`<br>`var x = 5`<br>`val y = 6`<br>`}`|class like above, but with default constructor, only new Foo() is possible|
-| `class Foo {def x = 5}`|class with default constructor and one method|
-|  `class C(x: R)` _same as_ <br>`class C(private val x: R)`<br>`var c = new C(4)`                         |  constructor params - automatically turn into private fields if used after construction. if not, the compiler doesn't generate fields for the params|
-|  `class C(val x: R)`<br>`var c = new C(4)`<br>`c.x`                                                      |  constructor params - exposed as public fields |
-|  `class C(var x: R) {`<br>`assert(x > 0, "positive please") //class body = constructor`<br>`var y = x // public field`<br>`val readonly = 5 // readonly field`<br>`private var secret = 1 // private field`<br>`def this = this(42) // alternative constructor`<br>`}`|simple example covering the common use cases. note: all alternative constructors must call the main constructor declared at the class declaration. this is it is impossible to forget to initialize a field by constructor overloading.|
+|`val intermediate = method("hello")`<br>`intermediate(5)`|why? 因为你可以先传递一个参数列表， 稍后再提供另一个。可以绕过 "不完整的调用" . 在java中，你得为这个创建个builder.|
+|  <h2 id="object_orientation">与OO相关的声明</h2>                                                     |                 |
+| `class Foo`| class 声明 - 可嵌套|
+| `class Foo(var x:String, val y:Int)`|带有2个公开field 的 class 声明, 一个可变, 一个不可变. 构造函数式自动生成. 只能用new Foo("1",2)|
+| `class Foo {`<br>`var x = 5`<br>`val y = 6`<br>`}`|和上面那个差不多 , 但是用的是默认函数, 也就是new Foo()|
+| `class Foo {def x = 5}`|默认的构造函数，声明了方法x|
+|  `class C(x: R)` _等同于_ <br>`class C(private val x: R)`<br>`var c = new C(4)`                         |  构造参数 - 如果没有明确val,自动转化成私有field. |
+|  `class C(val x: R)`<br>`var c = new C(4)`<br>`c.x`                                                      |  构造参数 - 明确val,作为公开 fields |
+|  `class C(var x: R) {`<br>`assert(x > 0, "positive please") //class body = constructor`<br>`var y = x // 公开 field`<br>`val readonly = 5 // 只读 field`<br>`private var secret = 1 // 私有 field`<br>`def this = this(42) // 替代构造函数`<br>`}`|包含常用情况的简单例子. 注: 所有的替代构造函数必须调用类声明中声明的主构造函数.以确保不会因为构造函数重载忘记初始化某个field.|
 |  `new{ ... }`                                                                                            |  anonymous class. more later (see implicits)|
 |`new Foo {...}`|anonymous subclass of Foo. Foo might be a class or a trait|
 |  `abstract class D { ... }`                                                                              |  define an abstract class. (non-createable, you have to create a subclass) |
