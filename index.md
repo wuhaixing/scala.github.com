@@ -58,17 +58,17 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |  `x.asInstanceOf[String]`                                                                                |  类型转换 (运行时) |
 |`case class Foo; case object Bar`|遇到关键字 "case" ，编译器会为其生成 equals & hashcode 方法，并且其构造参数都是只读的公开fields|
 |  <h2 id="functiondeclaration">函数声明</h2>                                                                       |                 |
-| `(i:Int) => i+1`|creates a function.| 
-| `var func = (i:Int) => i+1`|creates a function and stores it in a variable|
-| `func(5)`|executing the function above|
-| `def func = (i:Int) => i+1`|creates a function each time the method is called and returns that function, not i+1|
-|`val func:(Int) => String = (i:Int) => i.toString`|just so you know the syntax of a type of a function :)|
-|`def takesFunction(f:(Int) => String) = f(5)`| method that takes the function above as a parameter and calls it. compiler figures out the return type "string" for you.|
-|`def method(i:Int) = t.toString;val func = method _`|appending an "_" converts any method into a function|
-|`takesFunction(method)`|is also possible, the compiler does the conversion for you in obvious cases|
-|`def method(s:String)(s2:String) = s+" "+s2`<br>`val intermediate:(String)=>String = method("hello")`<br>`intermediate("world")`|parameter lists revisited: the intermediate, "incomplete method calls" are functions. the result of the last call is "hello world"|
-|`func(5)`<br>`func.apply(5)`|what you are actually calling is the apply-method of a function instance, but you don't have to explicitly write that. if no method name is given, the compiler assumed you want to call "apply"|
-|`def createFunction = (i:Int) => i+1`<br>`createFunction(5)`|if you have read the syntax section above, you can figure out what happens here. first, createFunction is called without () and without a parameter. then, 5 is applied to the apply method of the *result* of createfunction|
+| `(i:Int) => i+1`|创建一个函数.| 
+| `var func = (i:Int) => i+1`|创建函数并把它声明为一个变量 func: Int => Int = <function1>|
+| `func(5)`|执行上面的函数|
+| `def func = (i:Int) => i+1`|每次调用方法的时候都创建一个函数并返回该函数,不是i+1 func: Int => Int|
+|`val func:(Int) => String = (i:Int) => i.toString`|这样你就了解函数类型的语法了吧 :)|
+|`def takesFunction(f:(Int) => String) = f(5)`| 用上面函数类型的函数作为参数的方法，并调用该函数.编译器能推断出返回类型为"string".|
+|`def method(i:Int) = t.toString;val func = method _`|在任何方法后面加上 "_" 都可以把他变成一个函数|
+|`takesFunction(method)`|这样也行, 当情况很明显的时候，编译器会为你做这种转换|
+|`def method(s:String)(s2:String) = s+" "+s2`<br>`val intermediate:(String)=>String = method("hello")`<br>`intermediate("world")`|再访参数列表: the intermediate, "非完整方法调用" 是函数. 最终结果是 "hello world"|
+|`func(5)`<br>`func.apply(5)`|实际上是调用了函数实例的apply方法, 只是你不必那么写罢了.如果没有写明方法名,编译器会假定你想调用 "apply" |
+|`def createFunction = (i:Int) => i+1`<br>`createFunction(5)`|如果看过了上面的语法部分, 你应该能明白这发生了什么. 首先, createFunction的调用没有 () 也没有参数. 然后, 5 传递给 creatFunction的返回结果的 apply 方法|
 |  <h2 id="typeinference">返回类型与类型推断</h2>                                                                       |                 |
 |  `val x = "hello"`|the compiler always picks the most specific type possible, in this case java.lang.String|
 |  `val x:Serializable = "hello"`|you can always specify a more general one|
