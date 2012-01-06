@@ -70,14 +70,14 @@ about: Thanks to <a href="http://brenocon.com/">Brendan O'Connor</a>, this cheat
 |`func(5)`<br>`func.apply(5)`|实际上是调用了函数实例的apply方法, 只是你不必那么写罢了.如果没有写明方法名,编译器会假定你想调用 "apply" |
 |`def createFunction = (i:Int) => i+1`<br>`createFunction(5)`|如果看过了上面的语法部分, 你应该能明白这发生了什么. 首先, createFunction的调用没有 () 也没有参数. 然后, 5 传递给 creatFunction的返回结果的 apply 方法|
 |  <h2 id="typeinference">返回类型与类型推断</h2>                                                                       |                 |
-|  `val x = "hello"`|the compiler always picks the most specific type possible, in this case java.lang.String|
-|  `val x:Serializable = "hello"`|you can always specify a more general one|
-|  `def x {print("hello world")}`                 | method without "=" means the method has no return type/return type is void (this is a lie)  | 
-|  `def x:Unit = {...}`<br>`def x() {...}`|leaving out the "=" at a method declaration is the same as specifying "Unit"|
-| `val blocks = {{{{5}}}}`|every block has a return type that is passed back to the next outer block|
-| `val block = if (a) foo else bar`|almost everything is an expression and thus, has a return type. this includes if-else-structures|
-|`def x = {`<br>`if (System.currentTimeMillis() % 2 == 0) Integer.valueOf(1) else java.lang.Double.valueOf(2)`<br>`}`|here, the compiler picks the most specific supertype of both Integer and Double which is java.lang.Number (this is a lie)|
-|`def x(i:Int):Int = if (i==0) 1 else i*x(i-1)`|recursive methods need an explicit return type. fail.|
+|  `val x = "hello"`|编译器总是会选择最可能的类型, 在这里是 java.lang.String|
+|  `val x:Serializable = "hello"`|你总能指定更通用的类型|
+|  `def x {print("hello world")}`                 | 没有 "=" 的方法表明这个方法没有返回类型，或者返回类型为void（逗你玩呢） | 
+|  `def x:Unit = {...}`<br>`def x() {...}`|去掉方法声明中的 "=" 和指定返回类型为 "Unit" 是一样的|
+| `val blocks = {{{{5}}}}`|每个代码块都会返回给外层代码块一个值|
+| `val block = if (a) foo else bar`|几乎一切都是表达式，因此，都有返回类型，包括if-else结构|
+|`def x = {`<br>`if (System.currentTimeMillis() % 2 == 0) Integer.valueOf(1) else java.lang.Double.valueOf(2)`<br>`}`|这个, 编译器选择 Integer 和 Double 的超类 java.lang.Number (实际上并非如此)|
+|`def x(i:Int):Int = if (i==0) 1 else i*x(i-1)`|递归方法需要显示的返回类型声明. 编译器没法进行推断.|
 |  <h2 id="collections">Scala 集合</h2>                                                                       |                 |
 |`1 to 3, Set(1,2,3), Buffer(1,2,3), ArrayBuffer(1,2,3), ListBuffer(1,2,3), List(1,2,3), Array(1,2,3),Vector(1,2,3), Map(1 -> "a", 2 -> "b")`|simple collection creations. scala has mutable and immutable collections.|
 |`1 :: 2 :: 3 :: Nil`|In addition to that, Lists have an alternative syntax|
